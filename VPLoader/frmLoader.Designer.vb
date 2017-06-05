@@ -29,8 +29,9 @@ Partial Class frmLoader
         'pbxGlass
         '
         Me.pbxGlass.Location = New System.Drawing.Point(0, 0)
+        Me.pbxGlass.Margin = New System.Windows.Forms.Padding(0)
         Me.pbxGlass.Name = "pbxGlass"
-        Me.pbxGlass.Size = New System.Drawing.Size(100, 50)
+        Me.pbxGlass.Size = New System.Drawing.Size(1, 1)
         Me.pbxGlass.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbxGlass.TabIndex = 0
         Me.pbxGlass.TabStop = False

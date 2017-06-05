@@ -117,6 +117,8 @@
             LastCurrent = GetNext(CurrentGame)
         ElseIf e.KeyCode = Keys.Escape Then
             LoadGames(True)
+        ElseIf e.KeyCode = Keys.Enter Then
+            LoadTable(GamesList(CurrentGame))
         Else
             Exit Sub
         End If
@@ -125,6 +127,12 @@
             ShowGlass()
             Me.Invalidate()
         End If
+    End Sub
+
+    Private Sub LoadTable(ByVal TheGame As GameInfo)
+        Dim thistable As String = TheGame.GetPath()
+        Dim vpin As String = TablePath & "\..\VPinball921.exe"
+        Process.Start(vpin, "-play """ & thistable & """")
     End Sub
 
     Private Sub PreLoad(sender As Object, e As EventArgs) Handles MyBase.Load
