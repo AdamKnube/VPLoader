@@ -8,7 +8,7 @@
         Private Path As String
         Private BackGlass As String = Nothing
         Public Function GetName() As String
-            Return System.IO.Path.GetFileName(Path).Replace(".vpt", "")
+            Return IO.Path.GetFileName(Path).Replace(".vpt", "").Split("_")(0)
         End Function
         Public Function GetPath() As String
             Return Path
@@ -47,22 +47,29 @@
         Me.Invalidate()
     End Sub
 
+    Private Sub AddTable(ByVal Where As String)
+        Dim ThisTable As New GameInfo
+        ThisTable.SetPath(Where)
+        Dim TestGlass As String = Where.Replace(".vpt", ".png")
+        If IO.File.Exists(TestGlass) Then
+            ThisTable.SetGlass(TestGlass)
+        End If
+        GamesList.Add(ThisTable)
+    End Sub
+
     Private Sub DirSearch(ByVal StartIn As String)
         Dim d, f As String
         Try
-            For Each d In System.IO.Directory.GetDirectories(StartIn)
-                For Each f In System.IO.Directory.GetFiles(d, "*.vpt")
-                    Dim thistable As New GameInfo
-                    thistable.SetPath(f)
-                    Dim testglass As String = f.Replace(".vpt", ".png")
-                    If System.IO.File.Exists(testglass) Then
-                        thistable.SetGlass(testglass)
-                    End If
-                    GamesList.Add(thistable)
+            For Each f In IO.Directory.GetFiles(StartIn, "*.vpt")
+                AddTable(f)
+            Next
+            For Each d In IO.Directory.GetDirectories(StartIn)
+                For Each f In IO.Directory.GetFiles(d, "*.vpt")
+                    AddTable(f)
                 Next
                 DirSearch(d)
             Next
-        Catch excpt As System.Exception
+        Catch excpt As Exception
             Debug.WriteLine(excpt.Message)
         End Try
     End Sub
@@ -80,11 +87,11 @@
     End Function
 
     Private Sub ShowGlass(Optional ByVal BackGlass As String = Nothing)
-        Dim thegame As GameInfo = GamesList(CurrentGame)
-        If thegame.GetGlass Is Nothing Then
+        Dim TheGame As GameInfo = GamesList(CurrentGame)
+        If TheGame.GetGlass Is Nothing Then
             pbxGlass.Image = Nothing
         Else
-            pbxGlass.Image = Bitmap.FromFile(thegame.GetGlass)
+            pbxGlass.Image = Image.FromFile(TheGame.GetGlass)
             pbxGlass.Image.RotateFlip(RotateFlipType.Rotate270FlipNone)
         End If
         pbxGlass.Refresh()
@@ -131,7 +138,7 @@
 
     Private Sub LoadTable(ByVal TheGame As GameInfo)
         Dim thistable As String = TheGame.GetPath()
-        Dim vpin As String = TablePath & "\..\VPinball921.exe"
+        Dim vpin As String = TablePath & "\..\VPinball993.exe"
         Process.Start(vpin, "-play """ & thistable & """")
     End Sub
 
